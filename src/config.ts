@@ -69,12 +69,13 @@ export async function validateInvocation(
   await apiClient.verifyAuthentication();
 }
 
+// TODO: Remove this code and only use config values without the "Bitbucket" prefix
 export function getExpandedConfig(config): BitbucketIntegrationConfig {
   const expandedConfig: BitbucketIntegrationConfig = {
-    ...config,
     oauthKey: config.bitbucketOauthKey,
     oauthSecret: config.bitbucketOauthSecret,
     teams: [config.bitbucketWorkspace],
+    ...config,
     ingestPullRequests: config.bitbucketIngestPullRequests !== 'false',
   };
   if (
