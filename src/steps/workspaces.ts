@@ -6,7 +6,6 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import { integrationConfig } from '../../test/config';
 import { convertWorkspaceToEntity } from '../sync/converters';
 import {
   BITBUCKET_WORKSPACE_ENTITY_TYPE,
@@ -17,7 +16,7 @@ export async function fetchWorkspaces(
   context: IntegrationStepExecutionContext<IntegrationConfig>,
 ) {
   const jobState = context.jobState;
-  const apiClient = createAPIClient(integrationConfig, context);
+  const apiClient = createAPIClient(context.instance.config, context);
 
   await apiClient.iterateWorkspaces(async (workspace) => {
     await jobState.addEntity(

@@ -7,7 +7,6 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import { integrationConfig } from '../../test/config';
 import collectCommitsForPR from '../sync/approval/collectCommitsForPR';
 import { calculatePRRequestFilter } from '../sync/helpers';
 import {
@@ -37,7 +36,7 @@ export async function fetchPRs(
   context: IntegrationStepExecutionContext<IntegrationConfig>,
 ) {
   const jobState = context.jobState;
-  const apiClient = createAPIClient(integrationConfig, context);
+  const apiClient = createAPIClient(context.instance.config, context);
 
   // old integration helper and converter code requires a map of user._key -> userEntity,
   // and an array of the user._key

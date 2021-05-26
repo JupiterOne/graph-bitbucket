@@ -8,7 +8,6 @@ import {
 
 import { createAPIClient } from '../client';
 import { IntegrationConfig } from '../config';
-import { integrationConfig } from '../../test/config';
 import {
   convertRepoToEntity,
   convertWorkspaceRepoToRelationship,
@@ -32,7 +31,7 @@ export async function fetchRepos(
   context: IntegrationStepExecutionContext<IntegrationConfig>,
 ) {
   const jobState = context.jobState;
-  const apiClient = createAPIClient(integrationConfig, context);
+  const apiClient = createAPIClient(context.instance.config, context);
 
   await jobState.iterateEntities(
     {
