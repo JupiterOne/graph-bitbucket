@@ -1,5 +1,5 @@
 {
-  "name": "@jupiterone/integration-template",
+  "name": "@jupiterone/graph-bitbucket",
   "version": "0.0.1",
   "description": "A JupiterOne Integration for BitBucket",
   "license": "MPL-2.0",
