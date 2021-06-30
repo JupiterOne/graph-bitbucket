@@ -8,6 +8,12 @@ and this project adheres to
 
 ## Unreleased
 
+## 2021-06-30 - 1.2.1
+
+### Fixed
+
+- MISSING_MODULE error in bundled package
+
 ## 2021-06-30 - 1.2.0
 
 ### Added
