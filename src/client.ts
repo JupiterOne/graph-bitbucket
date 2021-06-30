@@ -4,15 +4,15 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 import BitbucketClient from './clients/BitbucketClient';
+import { IntegrationConfig, sanitizeConfig } from './config';
 import {
-  BitbucketWorkspace,
-  BitbucketUser,
   BitbucketGroup,
+  BitbucketPR,
   BitbucketProject,
   BitbucketRepo,
-  BitbucketPR,
+  BitbucketUser,
+  BitbucketWorkspace,
 } from './types/bitbucket';
-import { IntegrationConfig, sanitizeConfig } from '../src/config';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
 
