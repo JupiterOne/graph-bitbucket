@@ -8,6 +8,8 @@ and this project adheres to
 
 ## Unreleased
 
+## 2021-07-02 - 1.2.2
+
 ### Fixed
 
 - [#42](https://github.com/JupiterOne/integrations/issues/42) Duplicate key in
