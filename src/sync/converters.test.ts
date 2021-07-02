@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid';
+
 import {
   asdf123Commit,
   expectedProjectEntity,
   expectedPullRequestEntity,
   expectedRepoEntity,
-  expectedUserEntity,
   expectedWorkspaceEntity,
   hjkl456Commit,
   prApiResponse,
@@ -22,17 +22,31 @@ import {
 } from '../types/entities';
 import * as converters from './converters';
 
-test('converters.convertWorkspaceToEntity', () => {
+test('convertWorkspaceToEntity', () => {
   const entity = converters.createWorkspaceEntity(workspaceApiResponse);
   expect(entity).toEqual(expectedWorkspaceEntity);
 });
 
-test('converters.convertUserToEntity', () => {
+test('convertUserToEntity', () => {
   const entity = converters.createUserEntity(userApiResponse as BitbucketUser);
-  expect(entity).toEqual(expectedUserEntity);
+  expect(entity).toEqual({
+    _type: 'bitbucket_user',
+    _class: ['User'],
+    _key: '{109cd504-f55e-48a0-8e7a-d04f0b10f016}',
+    _rawData: [
+      {
+        name: 'default',
+        rawData: userApiResponse,
+      },
+    ],
+    nickname: 'philgatesidem-lifeomic',
+    displayName: 'Phil Gates-Idem',
+    name: 'Phil Gates-Idem',
+    username: 'Phil Gates-Idem',
+  });
 });
 
-test('converters.convertRepoToEntity', () => {
+test('convertRepoToEntity', () => {
   const entity = converters.createRepoEntity(
     '{816bc128-0132-4b85-a3d0-78900493a1f0}',
     repoApiResponse as BitbucketRepo,
@@ -40,13 +54,13 @@ test('converters.convertRepoToEntity', () => {
   expect(entity).toEqual(expectedRepoEntity);
 });
 
-test('converters.convertProjectToEntity', () => {
+test('convertProjectToEntity', () => {
   const workspace = 'lifeomic';
   const entity = converters.createProjectEntity(workspace, projectApiResponse);
   expect(entity).toEqual(expectedProjectEntity(workspace));
 });
 
-describe('converters.convertPRToEntity', () => {
+describe('convertPRToEntity', () => {
   test('calculates approval values', () => {
     const entity = converters.createPrEntity({
       accountUUID: 'le_account',
@@ -93,7 +107,7 @@ describe('converters.convertPRToEntity', () => {
   });
 });
 
-test('converters.convertWorkspaceUserToRelationship', () => {
+test('convertWorkspaceUserToRelationship', () => {
   const workspace: BitbucketWorkspaceEntity = {
     _type: 'bitbucket_workspace',
     _class: ['Account'],
@@ -125,7 +139,7 @@ test('converters.convertWorkspaceUserToRelationship', () => {
   });
 });
 
-test('converters.convertWorkspaceRepoToRelationship', () => {
+test('convertWorkspaceRepoToRelationship', () => {
   const workspaceEntity: BitbucketWorkspaceEntity = {
     _type: 'bitbucket_workspace',
     _class: 'Account',

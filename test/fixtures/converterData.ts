@@ -80,16 +80,6 @@ export const userApiResponse = {
   uuid: userUUID,
 };
 
-export const expectedUserEntity = {
-  _type: 'bitbucket_user',
-  _class: 'User',
-  _key: '{109cd504-f55e-48a0-8e7a-d04f0b10f016}',
-  nickname: 'philgatesidem-lifeomic',
-  displayName: 'Phil Gates-Idem',
-  name: 'Phil Gates-Idem',
-  username: 'Phil Gates-Idem',
-};
-
 export const repoApiResponse = {
   scm: 'git',
   website: '',
