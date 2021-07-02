@@ -8,6 +8,11 @@ and this project adheres to
 
 ## Unreleased
 
+### Fixed
+
+- [#42](https://github.com/JupiterOne/integrations/issues/42) Duplicate key in
+  fetch-users step
+
 ## 2021-06-30 - 1.2.1
 
 ### Fixed

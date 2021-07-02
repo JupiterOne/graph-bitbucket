@@ -1,5 +1,4 @@
 import {
-  createIntegrationEntity,
   IntegrationStep,
   IntegrationStepExecutionContext,
   RelationshipClass,
@@ -8,27 +7,27 @@ import {
 import { createAPIClient } from '../client';
 import { IntegrationConfig, sanitizeConfig } from '../config';
 import {
-  createUserEntity,
-  createWorkspaceHasUserRelationship,
-} from '../sync/converters';
-import {
-  BITBUCKET_WORKSPACE_ENTITY_TYPE,
-  BITBUCKET_USER_ENTITY_TYPE,
   BITBUCKET_USER_ENTITY_CLASS,
+  BITBUCKET_USER_ENTITY_TYPE,
+  BITBUCKET_WORKSPACE_ENTITY_TYPE,
   BITBUCKET_WORKSPACE_USER_RELATIONSHIP_TYPE,
   DATA_USER_BY_ID_MAP,
   DATA_USER_ID_ARRAY,
 } from '../constants';
 import {
-  BitbucketWorkspaceEntity,
+  createUserEntity,
+  createWorkspaceHasUserRelationship,
+} from '../sync/converters';
+import {
   BitbucketUserEntity,
+  BitbucketWorkspaceEntity,
   IdEntityMap,
 } from '../types';
 
 export async function fetchUsers(
   context: IntegrationStepExecutionContext<IntegrationConfig>,
 ) {
-  const jobState = context.jobState;
+  const { jobState, logger } = context;
   const apiClient = createAPIClient(
     sanitizeConfig(context.instance.config),
     context,
@@ -44,26 +43,32 @@ export async function fetchUsers(
     },
     async (workspaceEntity) => {
       if (workspaceEntity.slug) {
-        const slug: string = <string>workspaceEntity.slug;
-        await apiClient.iterateUsers(slug, async (user) => {
-          const convertedUser = createUserEntity(user);
-          const userEntity = (await jobState.addEntity(
-            createIntegrationEntity({
-              entityData: {
-                source: user,
-                assign: convertedUser,
-              },
-            }),
-          )) as BitbucketUserEntity;
-          const workspace: BitbucketWorkspaceEntity = <
-            BitbucketWorkspaceEntity
-          >workspaceEntity;
-          await jobState.addRelationship(
-            createWorkspaceHasUserRelationship(workspace, userEntity),
-          );
-          userByIdMap[user.uuid] = userEntity;
-          userIds.push(userEntity._key);
-        });
+        await apiClient.iterateUsers(
+          workspaceEntity.slug as string,
+          async (user) => {
+            const userEntity = createUserEntity(user);
+            if (jobState.hasKey(userEntity._key)) {
+              logger.warn(
+                {
+                  workspaceKey: workspaceEntity._key,
+                  userKey: userEntity._key,
+                },
+                '[SKIP] Duplicate user',
+              );
+            } else {
+              await jobState.addEntity(userEntity);
+              userByIdMap[user.uuid] = userEntity;
+              userIds.push(userEntity._key);
+            }
+
+            await jobState.addRelationship(
+              createWorkspaceHasUserRelationship(
+                workspaceEntity as BitbucketWorkspaceEntity,
+                userEntity,
+              ),
+            );
+          },
+        );
       }
     },
   );

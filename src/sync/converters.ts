@@ -85,16 +85,20 @@ export function createWorkspaceEntity(
 }
 
 export function createUserEntity(user: BitbucketUser): BitbucketUserEntity {
-  const userEntity: BitbucketUserEntity = {
-    _type: BITBUCKET_USER_ENTITY_TYPE,
-    _class: BITBUCKET_USER_ENTITY_CLASS,
-    _key: user.uuid,
-    nickname: user.nickname,
-    displayName: user.display_name,
-    name: user.display_name,
-    username: user.display_name, //this was not set by the old integration
-  };
-  return userEntity;
+  return createIntegrationEntity({
+    entityData: {
+      source: user,
+      assign: {
+        _type: BITBUCKET_USER_ENTITY_TYPE,
+        _class: BITBUCKET_USER_ENTITY_CLASS,
+        _key: user.uuid,
+        nickname: user.nickname,
+        displayName: user.display_name,
+        name: user.display_name,
+        username: user.display_name,
+      },
+    },
+  }) as BitbucketUserEntity;
 }
 
 export function createGroupEntity(group: BitbucketGroup): BitbucketGroupEntity {
