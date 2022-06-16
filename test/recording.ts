@@ -53,7 +53,34 @@ function mutateRecordingEntry(entry: RecordingEntry): void {
         0,
       );
     }
+
+    if (/1.0\/groups\//.exec(entry.request.url)) {
+      const redactedArray: any = [];
+      for (const group of responseJson) {
+        const redactedGroup = sanitizeGroupMembers(group);
+        redactedArray.push(redactedGroup);
+      }
+      entry.response.content.text = JSON.stringify(redactedArray, null, 0);
+    }
   }
+}
+
+function sanitizeGroupMembers(group) {
+  const redactedMembers: any = [];
+  for (const member of group.members) {
+    const redactedMember = {
+      ...member,
+      //names have to be redacted, but don't have to match User #s to sanitizeMembers below
+      //group.member entries are only used to make relationships, and those are matched on uuid
+      display_name: 'User X',
+      nickname: 'Nickname X',
+    };
+    redactedMembers.push(redactedMember);
+  }
+  return {
+    ...group,
+    members: redactedMembers,
+  };
 }
 
 function sanitizeMembers(values: BitbucketWorkspaceMembership[]) {
