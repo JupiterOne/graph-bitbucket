@@ -9,6 +9,7 @@ import { setupBitbucketRecording } from '../../test/recording';
 import { integrationConfig } from '../../test/config';
 import { fetchProjects } from './projects';
 import { fetchRepos } from './repos';
+import { fetchGroups } from './groups';
 
 let recording: Recording;
 afterEach(async () => {
@@ -29,6 +30,7 @@ test('should collect data', async () => {
   // See https://github.com/JupiterOne/sdk/issues/262.
   await fetchWorkspaces(context);
   await fetchUsers(context);
+  await fetchGroups(context);
   await fetchProjects(context);
   await fetchRepos(context);
 
@@ -77,6 +79,26 @@ test('should collect data', async () => {
       additionalProperties: true,
       properties: {
         _type: { const: 'bitbucket_user' },
+        displayName: { type: 'string' },
+        _rawData: {
+          type: 'array',
+          items: { type: 'object' },
+        },
+      },
+      required: ['displayName'],
+    },
+  });
+
+  const groups = context.jobState.collectedEntities.filter((e) =>
+    e._class.includes('UserGroup'),
+  );
+  expect(groups.length).toBeGreaterThan(0);
+  expect(groups).toMatchGraphObjectSchema({
+    _class: ['UserGroup'],
+    schema: {
+      additionalProperties: true,
+      properties: {
+        _type: { const: 'bitbucket_group' },
         displayName: { type: 'string' },
         _rawData: {
           type: 'array',
