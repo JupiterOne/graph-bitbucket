@@ -85,7 +85,7 @@ export const userSteps: IntegrationStep<IntegrationConfig>[] = [
       {
         resourceName: 'Bitbucket User',
         _type: BITBUCKET_USER_ENTITY_TYPE,
-        _class: BITBUCKET_USER_ENTITY_CLASS,
+        _class: [BITBUCKET_USER_ENTITY_CLASS],
       },
     ],
     relationships: [

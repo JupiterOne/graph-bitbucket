@@ -2,10 +2,6 @@ import { parseTimePropertyValue } from '@jupiterone/integration-sdk-core';
 import { v4 as uuid } from 'uuid';
 import { BitbucketPR, BitbucketWorkspace } from '../../src/types';
 
-function getTime(input) {
-  return parseTimePropertyValue(input);
-}
-
 export const workspaceApiResponse = ({
   uuid: '{816bc128-0132-4b85-a3d0-78900493a1f0}',
   links: {
@@ -207,7 +203,7 @@ export const expectedRepoEntity = {
   webLink: 'https://bitbucket.org/lifeomic/wiki',
 };
 
-const dateVal = Date.now().toString();
+const dateVal = new Date().toISOString();
 export const projectApiResponse = {
   uuid: uuid(),
   key: '🔑',
@@ -241,8 +237,8 @@ export function expectedProjectEntity(workspace: string) {
     workspace: workspace,
     displayName: 'omae wa mo shinderu',
     webLink: 'https://jupiterone.io/html',
-    createdOn: getTime(projectApiResponse.created_on),
-    updatedOn: getTime(projectApiResponse.updated_on),
+    createdOn: parseTimePropertyValue(projectApiResponse.created_on),
+    updatedOn: parseTimePropertyValue(projectApiResponse.updated_on),
   };
 }
 

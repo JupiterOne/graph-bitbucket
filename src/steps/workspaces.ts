@@ -41,7 +41,7 @@ export const workspaceSteps: IntegrationStep<IntegrationConfig>[] = [
       {
         resourceName: 'Bitbucket Workspace',
         _type: BITBUCKET_WORKSPACE_ENTITY_TYPE,
-        _class: BITBUCKET_WORKSPACE_ENTITY_CLASS,
+        _class: [BITBUCKET_WORKSPACE_ENTITY_CLASS],
       },
     ],
     relationships: [],

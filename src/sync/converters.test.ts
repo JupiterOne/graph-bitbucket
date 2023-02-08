@@ -43,6 +43,7 @@ test('convertUserToEntity', () => {
     displayName: 'Phil Gates-Idem',
     name: 'Phil Gates-Idem',
     username: 'Phil Gates-Idem',
+    active: true,
   });
 });
 

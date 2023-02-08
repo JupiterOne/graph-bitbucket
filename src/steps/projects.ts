@@ -64,7 +64,7 @@ export const projectSteps: IntegrationStep<IntegrationConfig>[] = [
       {
         resourceName: 'Bitbucket Project',
         _type: BITBUCKET_PROJECT_ENTITY_TYPE,
-        _class: BITBUCKET_PROJECT_ENTITY_CLASS,
+        _class: [BITBUCKET_PROJECT_ENTITY_CLASS],
       },
     ],
     relationships: [
