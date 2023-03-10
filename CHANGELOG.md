@@ -8,7 +8,9 @@ and this project adheres to
 
 ## Unreleased
 
-## Changed
+## 2023-03-10 - 2.0.0
+
+### Changed
 
 - Upgraded SDK dependencies to v8
 - Updated use of `getTime` → `parseTimePropertyValue`
