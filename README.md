@@ -3,10 +3,6 @@
 Learn about the data ingested, benefits of this integration, and how to use it
 with JupiterOne in the [integration documentation](docs/jupiterone.md).
 
-Submit requests for additional resource ingestion or bug reports to our
-[Integration Issues](https://github.com/JupiterOne/integrations/issues)
-repository.
-
 ## Development
 
 ### Prerequisites
@@ -22,11 +18,17 @@ repository.
 5. `cp .env.example .env` and add necessary values for runtime configuration.
 
    When an integration executes, it needs API credentials and any other
-   configuration parameters necessary for fetching data from the provider. The
-   names of these parameters are defined in `src/instanceConfigFields.ts`. When
-   executed in a development environment, values for these parameters are read
-   from Node's `process.env`, loaded from `.env`. That file has been added to
-   `.gitignore` to avoid commiting credentials.
+   configuration parameters necessary for its work (provider API credentials,
+   data ingestion parameters, etc.). The names of these parameters are defined
+   by the `IntegrationInstanceConfigFieldMap`in `src/config.ts`. When the
+   integration is executed outside the JupiterOne managed environment (local
+   development or on-prem), values for these parameters are read from Node's
+   `process.env` by converting config field names to constant case. For example,
+   `clientId` is read from `process.env.CLIENT_ID`.
+
+   The `.env` file is loaded into `process.env` before the integration code is
+   executed. This file is not required should you configure the environment
+   another way. `.gitignore` is configured to avoid committing the `.env` file.
 
 ### Running the integration
 
@@ -44,13 +46,58 @@ necessarily prevent the ingestion of other, unrelated data. That should be
 enough information to allow you to get started coding!
 
 See the
-[SDK development documentation](https://github.com/JupiterOne/sdk/blob/master/docs/integrations/development.md)
+[SDK development documentation](https://github.com/JupiterOne/sdk/blob/main/docs/integrations/development.md)
 for a deep dive into the mechanics of how integrations work.
 
 See [docs/development.md](docs/development.md) for any additional details about
 developing this integration.
 
+## Testing the integation
+
+Ideally, all major calls to the API and converter functions would be tested. You
+can run the tests with `yarn test`, and you can run the tests as they execute in
+the CI/CD environment with `yarn test:ci` (adds linting and type-checking to
+`yarn test`). If you have a valid runtime configuration, you can run the tests
+with your credentials using `yarn test:env`.
+
+For more details on setting up tests, and specifically on using recordings to
+simulate API responses, see `test/README.md`.
+
 ### Changelog
 
 The history of this integration's development can be viewed at
 [CHANGELOG.md](CHANGELOG.md).
+
+## Versioning this project
+
+This project is versioned using [auto](https://intuit.github.io/auto/).
+
+Versioning and publishing to NPM are now handled via adding GitHub labels to
+pull requests. The following labels should be used for this process:
+
+- patch
+- minor
+- major
+- release
+
+For each pull request, the degree of change should be registered by applying the
+appropriate label of patch, minor, or major. This allows the repository to keep
+track of the highest degree of change since the last release. When ready to
+publish to NPM, the PR should have both its appropriate patch, minor, or major
+label applied as well as a release label. The release label will denote to the
+system that we need to publish to NPM and will correctly version based on the
+highest degree of change since the last release, package the project, and
+publish it to NPM.
+
+In order to successfully version and publish to NPM we need access to two
+secrets: a valid NPM token for publishing and a GitHub token for querying the
+repo and pushing version changes. For JupiterOne projects please put in a ticket
+with security to have the repository correctly granted access. For external
+projects, please provide secrets with access to your own NPM and GitHub
+accounts. The secret names should be set to NPM_AUTH_TOKEN and
+AUTO_GITHUB_PAT_TOKEN respectively (or the action can be updated to accomodate
+different naming conventions).
+
+We are not currently using the functionality for auto to update the CHANGELOG.
+As such, please remember to update CHANGELOG.md with the appropriate version,
+date, and changes.

@@ -14,6 +14,7 @@ export function setupBitbucketRecording(
 ): Recording {
   return setupRecording({
     ...input,
+    redactedResponseHeaders: ['x-consumer-client-id', 'x-app-key'],
     mutateEntry: mutateRecordingEntry,
   });
 }

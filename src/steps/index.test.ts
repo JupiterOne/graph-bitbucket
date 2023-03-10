@@ -1,134 +1,55 @@
 import {
-  createMockStepExecutionContext,
+  executeStepWithDependencies,
   Recording,
 } from '@jupiterone/integration-sdk-testing';
-import { IntegrationConfig } from '../config';
-import { fetchUsers } from './users';
-import { fetchWorkspaces } from './workspaces';
 import { setupBitbucketRecording } from '../../test/recording';
-import { integrationConfig } from '../../test/config';
-import { fetchProjects } from './projects';
-import { fetchRepos } from './repos';
+import { buildStepTestConfigForStep } from '../../test/config';
 
 let recording: Recording;
 afterEach(async () => {
   await recording.stop();
 });
 
-test('should collect data', async () => {
+test('fetch-users', async () => {
   recording = setupBitbucketRecording({
     directory: __dirname,
-    name: 'steps', //redaction of headers is in setupBitbucketRecording
+    name: 'fetch-users', //redaction of headers is in setupBitbucketRecording
   });
 
-  const context = createMockStepExecutionContext<IntegrationConfig>({
-    instanceConfig: integrationConfig,
+  const stepConfig = buildStepTestConfigForStep('fetch-users');
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);
+
+test('fetch-workspaces', async () => {
+  recording = setupBitbucketRecording({
+    directory: __dirname,
+    name: 'fetch-workspaces', //redaction of headers is in setupBitbucketRecording
   });
 
-  // Simulates dependency graph execution.
-  // See https://github.com/JupiterOne/sdk/issues/262.
-  await fetchWorkspaces(context);
-  await fetchUsers(context);
-  await fetchProjects(context);
-  await fetchRepos(context);
+  const stepConfig = buildStepTestConfigForStep('fetch-workspaces');
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);
 
-  //note: detailed converter tests exist in sync/converters.test.ts
-  //this includes details of converting fetched PRs, which are only
-  //fetched within the last 24 hours
-  //because that is well tested there, these tests are only checking
-  //on fetching the other objects
-
-  // Review snapshot, failure is a regression
-  expect({
-    numCollectedEntities: context.jobState.collectedEntities.length,
-    numCollectedRelationships: context.jobState.collectedRelationships.length,
-    collectedEntities: context.jobState.collectedEntities,
-    collectedRelationships: context.jobState.collectedRelationships,
-    encounteredTypes: context.jobState.encounteredTypes,
-  }).toMatchSnapshot();
-
-  const accounts = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('Account'),
-  );
-  expect(accounts.length).toBeGreaterThan(0);
-  expect(accounts).toMatchGraphObjectSchema({
-    _class: ['Account'],
-    schema: {
-      additionalProperties: true,
-      properties: {
-        _type: { const: 'bitbucket_workspace' },
-        slug: { type: 'string' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: [],
-    },
+test('fetch-projects', async () => {
+  recording = setupBitbucketRecording({
+    directory: __dirname,
+    name: 'fetch-projects', //redaction of headers is in setupBitbucketRecording
   });
 
-  const users = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('User'),
-  );
-  expect(users.length).toBeGreaterThan(0);
-  expect(users).toMatchGraphObjectSchema({
-    _class: ['User'],
-    schema: {
-      additionalProperties: true,
-      properties: {
-        _type: { const: 'bitbucket_user' },
-        displayName: { type: 'string' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: ['displayName'],
-    },
+  const stepConfig = buildStepTestConfigForStep('fetch-projects');
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);
+
+test('fetch-repos', async () => {
+  recording = setupBitbucketRecording({
+    directory: __dirname,
+    name: 'fetch-repos', //redaction of headers is in setupBitbucketRecording
   });
 
-  const projects = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('Project'),
-  );
-  expect(projects.length).toBeGreaterThan(0);
-  expect(projects).toMatchGraphObjectSchema({
-    _class: ['Project'],
-    schema: {
-      additionalProperties: true,
-      properties: {
-        _type: { const: 'bitbucket_project' },
-        name: { type: 'string' },
-        workspace: { type: 'string' },
-        webLink: { type: 'string', format: 'url' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: ['name', 'workspace', 'webLink'],
-    },
-  });
-
-  const repos = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('CodeRepo'),
-  );
-  expect(repos.length).toBeGreaterThan(0);
-  expect(repos).toMatchGraphObjectSchema({
-    _class: ['CodeRepo'],
-    schema: {
-      additionalProperties: true,
-      properties: {
-        _type: { const: 'bitbucket_repo' },
-        name: { type: 'string' },
-        ownerId: { type: 'string' },
-        projectId: { type: 'string' },
-        webLink: { type: 'string', format: 'url' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: ['name', 'ownerId', 'projectId', 'webLink'],
-    },
-  });
-});
+  const stepConfig = buildStepTestConfigForStep('fetch-repos');
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);

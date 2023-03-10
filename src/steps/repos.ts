@@ -86,7 +86,7 @@ export const repoSteps: IntegrationStep<IntegrationConfig>[] = [
       {
         resourceName: 'Bitbucket Repo',
         _type: BITBUCKET_REPO_ENTITY_TYPE,
-        _class: BITBUCKET_REPO_ENTITY_CLASS,
+        _class: [BITBUCKET_REPO_ENTITY_CLASS],
       },
     ],
     relationships: [

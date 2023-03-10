@@ -62,10 +62,6 @@ import {
   flattenMatrix,
 } from './helpers';
 
-function getTime(input) {
-  return parseTimePropertyValue(input);
-}
-
 export function createWorkspaceEntity(
   workspace: BitbucketWorkspace,
 ): BitbucketWorkspaceEntity {
@@ -78,8 +74,8 @@ export function createWorkspaceEntity(
     displayName: workspace.name,
     webLink: workspace.links.html.href,
     isPrivate: workspace.is_private,
-    createdOn: getTime(workspace.created_on),
-    updatedOn: getTime(workspace.updated_on),
+    createdOn: parseTimePropertyValue(workspace.created_on),
+    updatedOn: parseTimePropertyValue(workspace.updated_on),
   };
   return workspaceEntity;
 }
@@ -96,6 +92,7 @@ export function createUserEntity(user: BitbucketUser): BitbucketUserEntity {
         displayName: user.display_name,
         name: user.display_name,
         username: user.display_name,
+        active: true,
       },
     },
   }) as BitbucketUserEntity;
@@ -137,8 +134,8 @@ export function createRepoEntity(
     projectId: repo.project && repo.project.uuid,
     public: !repo.is_private,
     webLink: repo.links.html.href,
-    createdOn: getTime(repo.created_on),
-    updatedOn: getTime(repo.updated_on),
+    createdOn: parseTimePropertyValue(repo.created_on),
+    updatedOn: parseTimePropertyValue(repo.updated_on),
   };
   return repoEntity;
 }
@@ -158,8 +155,8 @@ export function createProjectEntity(
     workspace: workspace,
     displayName: project.name,
     webLink: project.links.html.href,
-    createdOn: getTime(project.created_on),
-    updatedOn: getTime(project.updated_on),
+    createdOn: parseTimePropertyValue(project.created_on),
+    updatedOn: parseTimePropertyValue(project.updated_on),
   };
   return projectEntity;
 }
@@ -239,8 +236,8 @@ export function createPrEntity({
     target: pullRequest.destination.branch.name,
     closeSourceBranch: pullRequest.close_source_branch,
 
-    createdOn: getTime(pullRequest.created_on),
-    updatedOn: getTime(pullRequest.updated_on),
+    createdOn: parseTimePropertyValue(pullRequest.created_on),
+    updatedOn: parseTimePropertyValue(pullRequest.updated_on),
 
     authorId: pullRequest.author.uuid,
     author: pullRequest.author.display_name,

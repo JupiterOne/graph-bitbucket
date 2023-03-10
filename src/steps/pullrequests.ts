@@ -124,23 +124,23 @@ export async function fetchPRs(
             );
           }
 
-          convertedPR.approverIds.forEach(async (approverId) => {
+          for (const approverId of convertedPR.approverIds) {
             const approverEntity = userByIdMap[approverId];
             if (approverEntity) {
               await jobState.addRelationship(
                 createUserApprovedPrRelationship(approverEntity, prEntity),
               );
             }
-          });
+          }
 
-          convertedPR.reviewerIds.forEach(async (reviewerId) => {
+          for (const reviewerId of convertedPR.reviewerIds) {
             const reviewerEntity = userByIdMap[reviewerId];
             if (reviewerEntity) {
               await jobState.addRelationship(
                 createUserReviewedPrRelationship(reviewerEntity, prEntity),
               );
             }
-          });
+          }
         },
       );
     },
