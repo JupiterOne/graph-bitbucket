@@ -2,6 +2,10 @@
   "name": "@jupiterone/graph-bitbucket",
   "version": "2.0.0",
   "description": "A JupiterOne Integration for BitBucket",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JupiterOne/graph-bitbucket"
+  },
   "license": "MPL-2.0",
   "main": "src/index.js",
   "types": "src/index.d.ts",
