@@ -161,32 +161,40 @@ https://github.com/JupiterOne/sdk/blob/main/docs/integrations/development.md
 
 The following entities are created:
 
-| Resources              | Entity `_type`          | Entity `_class` |
-| ---------------------- | ----------------------- | --------------- |
-| Bitbucket Group        | `bitbucket_group`       | `UserGroup`     |
-| Bitbucket Project      | `bitbucket_project`     | `Project`       |
-| Bitbucket Pull Request | `bitbucket_pullrequest` | `Review`, `PR`  |
-| Bitbucket Repo         | `bitbucket_repo`        | `CodeRepo`      |
-| Bitbucket User         | `bitbucket_user`        | `User`          |
-| Bitbucket Workspace    | `bitbucket_workspace`   | `Account`       |
+| Resources                    | Entity `_type`                 | Entity `_class` |
+| ---------------------------- | ------------------------------ | --------------- |
+| Bitbucket Branch Restriction | `bitbucket_branch_restriction` | `AccessPolicy`  |
+| Bitbucket Group              | `bitbucket_group`              | `UserGroup`     |
+| Bitbucket Permission         | `bitbucket_permission`         | `AccessPolicy`  |
+| Bitbucket Project            | `bitbucket_project`            | `Project`       |
+| Bitbucket Pull Request       | `bitbucket_pullrequest`        | `Review`, `PR`  |
+| Bitbucket Repo               | `bitbucket_repo`               | `CodeRepo`      |
+| Bitbucket User               | `bitbucket_user`               | `User`          |
+| Bitbucket Workspace          | `bitbucket_workspace`          | `Account`       |
 
 ### Relationships
 
 The following relationships are created:
 
-| Source Entity `_type` | Relationship `_class` | Target Entity `_type`   |
-| --------------------- | --------------------- | ----------------------- |
-| `bitbucket_group`     | **HAS**               | `bitbucket_user`        |
-| `bitbucket_project`   | **HAS**               | `bitbucket_repo`        |
-| `bitbucket_repo`      | **HAS**               | `bitbucket_pullrequest` |
-| `bitbucket_user`      | **APPROVED**          | `bitbucket_pullrequest` |
-| `bitbucket_user`      | **OPENED**            | `bitbucket_pullrequest` |
-| `bitbucket_user`      | **OWNS**              | `bitbucket_group`       |
-| `bitbucket_user`      | **REVIEWED**          | `bitbucket_pullrequest` |
-| `bitbucket_workspace` | **HAS**               | `bitbucket_group`       |
-| `bitbucket_workspace` | **HAS**               | `bitbucket_user`        |
-| `bitbucket_workspace` | **OWNS**              | `bitbucket_project`     |
-| `bitbucket_workspace` | **OWNS**              | `bitbucket_repo`        |
+| Source Entity `_type`          | Relationship `_class` | Target Entity `_type`          |
+| ------------------------------ | --------------------- | ------------------------------ |
+| `bitbucket_branch_restriction` | **ALLOWS**            | `bitbucket_group`              |
+| `bitbucket_branch_restriction` | **ALLOWS**            | `bitbucket_user`               |
+| `bitbucket_group`              | **HAS**               | `bitbucket_permission`         |
+| `bitbucket_group`              | **HAS**               | `bitbucket_user`               |
+| `bitbucket_project`            | **HAS**               | `bitbucket_repo`               |
+| `bitbucket_repo`               | **HAS**               | `bitbucket_branch_restriction` |
+| `bitbucket_repo`               | **ALLOWS**            | `bitbucket_permission`         |
+| `bitbucket_repo`               | **HAS**               | `bitbucket_pullrequest`        |
+| `bitbucket_user`               | **OWNS**              | `bitbucket_group`              |
+| `bitbucket_user`               | **HAS**               | `bitbucket_permission`         |
+| `bitbucket_user`               | **APPROVED**          | `bitbucket_pullrequest`        |
+| `bitbucket_user`               | **OPENED**            | `bitbucket_pullrequest`        |
+| `bitbucket_user`               | **REVIEWED**          | `bitbucket_pullrequest`        |
+| `bitbucket_workspace`          | **HAS**               | `bitbucket_group`              |
+| `bitbucket_workspace`          | **OWNS**              | `bitbucket_project`            |
+| `bitbucket_workspace`          | **OWNS**              | `bitbucket_repo`               |
+| `bitbucket_workspace`          | **HAS**               | `bitbucket_user`               |
 
 <!--
 ********************************************************************************

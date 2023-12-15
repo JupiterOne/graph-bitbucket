@@ -23,6 +23,14 @@ export interface BitbucketWorkspaceEntity extends Entity {
   webLink?: string;
 }
 
+export interface BitbucketPermissionEntity extends Entity {
+  _type: 'bitbucket_permission';
+  permission: string;
+  principalKey: string;
+  ownerId: string;
+  name: string;
+}
+
 export interface BitbucketRepoEntity extends Entity {
   _type: 'bitbucket_repo';
   name: string;

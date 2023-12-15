@@ -6,11 +6,14 @@ import {
 import BitbucketClient from './clients/BitbucketClient';
 import { IntegrationConfig, sanitizeConfig } from './config';
 import {
+  BitbucketBranchRestriction,
   BitbucketGroup,
+  BitbucketGroupPermission,
   BitbucketPR,
   BitbucketProject,
   BitbucketRepo,
   BitbucketUser,
+  BitbucketUserPermission,
   BitbucketWorkspace,
 } from './types/bitbucket';
 
@@ -78,9 +81,8 @@ export class APIClient {
     workspaceSlug: string,
     iteratee: ResourceIteratee<BitbucketUser>,
   ): Promise<void> {
-    const users: BitbucketUser[] = await this.bitbucket.getAllWorkspaceMembers(
-      workspaceSlug,
-    );
+    const users: BitbucketUser[] =
+      await this.bitbucket.getAllWorkspaceMembers(workspaceSlug);
 
     for (const user of users) {
       await iteratee(user);
@@ -96,9 +98,8 @@ export class APIClient {
     workspaceSlug: string,
     iteratee: ResourceIteratee<BitbucketGroup>,
   ): Promise<void> {
-    const groups: BitbucketGroup[] = await this.bitbucket.getAllWorkspaceGroups(
-      workspaceSlug,
-    );
+    const groups: BitbucketGroup[] =
+      await this.bitbucket.getAllWorkspaceGroups(workspaceSlug);
 
     for (const group of groups) {
       await iteratee(group);
@@ -114,9 +115,8 @@ export class APIClient {
     workspaceSlug: string,
     iteratee: ResourceIteratee<BitbucketProject>,
   ): Promise<void> {
-    const projects: BitbucketProject[] = await this.bitbucket.getAllProjects(
-      workspaceSlug,
-    );
+    const projects: BitbucketProject[] =
+      await this.bitbucket.getAllProjects(workspaceSlug);
 
     for (const project of projects) {
       await iteratee(project);
@@ -132,9 +132,8 @@ export class APIClient {
     workspaceUuid: string,
     iteratee: ResourceIteratee<BitbucketRepo>,
   ): Promise<void> {
-    const repos: BitbucketRepo[] = await this.bitbucket.getAllRepos(
-      workspaceUuid,
-    );
+    const repos: BitbucketRepo[] =
+      await this.bitbucket.getAllRepos(workspaceUuid);
 
     for (const repo of repos) {
       await iteratee(repo);
@@ -174,6 +173,60 @@ export class APIClient {
       } else {
         await iteratee(pr);
       }
+    }
+  }
+
+  /**
+   * Iterates each Bitbucket repo group permissions for a given workspace and repo.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateRepoGroupPermissions(
+    workspaceUuid: string,
+    repoUuid: string,
+    iteratee: ResourceIteratee<BitbucketGroupPermission>,
+  ): Promise<void> {
+    const groupPermissions: BitbucketGroupPermission[] =
+      await this.bitbucket.getAllReposGroupPermissions(workspaceUuid, repoUuid);
+    for (const permission of groupPermissions) {
+      await iteratee(permission);
+    }
+  }
+
+  /**
+   * Iterates each Bitbucket repo user permissions for a given workspace and repo.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateRepoUserPermissions(
+    workspaceUuid: string,
+    repoUuid: string,
+    iteratee: ResourceIteratee<BitbucketUserPermission>,
+  ): Promise<void> {
+    const userPermissions: BitbucketUserPermission[] =
+      await this.bitbucket.getAllReposUserPermissions(workspaceUuid, repoUuid);
+    for (const permission of userPermissions) {
+      await iteratee(permission);
+    }
+  }
+
+  /**
+   * Iterates each Bitbucket repo branch restrictions for a given workspace and repo.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateRepoBranchRestrictions(
+    workspaceUuid: string,
+    repoUuid: string,
+    iteratee: ResourceIteratee<BitbucketBranchRestriction>,
+  ): Promise<void> {
+    const restrictions: BitbucketBranchRestriction[] =
+      await this.bitbucket.getAllRepoBranchRestrictions(
+        workspaceUuid,
+        repoUuid,
+      );
+    for (const restriction of restrictions) {
+      await iteratee(restriction);
     }
   }
 }

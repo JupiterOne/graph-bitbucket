@@ -200,3 +200,72 @@ export interface BitbucketPRSourceDestination {
   };
   repository: BitbucketRepo;
 }
+
+export interface BitbucketGroupPermission {
+  type: string;
+  group: BitbucketGroupPermissionGroup;
+  permission: string;
+  links: BitbucketGroupPermissionLinks;
+}
+
+export interface BitbucketGroupPermissionGroup {
+  type: string;
+  name: string;
+  slug: string;
+}
+
+export interface BitbucketGroupPermissionLinks {
+  self: BitbucketGroupPermissionSelf;
+}
+
+export interface BitbucketGroupPermissionSelf {
+  href: string;
+}
+
+export interface BitbucketUserPermission {
+  type: string;
+  user: BitbucketUserPermissionUser;
+  permission: string;
+  links: BitbucketUserPermissionLinks;
+}
+
+export interface BitbucketUserPermissionLinks {
+  self: BitbucketUserPermissionSelf;
+}
+
+export interface BitbucketUserPermissionSelf {
+  href: string;
+}
+
+export interface BitbucketUserPermissionUser {
+  type: string;
+  display_name: string;
+  uuid: string;
+  account_id: string;
+}
+
+export interface BitbucketBranchRestriction {
+  id: number;
+  kind: string;
+  value: string;
+  branch_match_kind: string;
+  type: string;
+  users: BitbucketBranchRestrictionUser[];
+  pattern: string;
+  groups: BitbucketBranchRestrictionGroup[];
+}
+
+export interface BitbucketBranchRestrictionGroup {
+  type: string;
+  slug: string;
+  full_slug: string;
+  name: string;
+}
+
+export interface BitbucketBranchRestrictionUser {
+  display_name: string;
+  type: string;
+  uuid: string;
+  account_id: string;
+  nickname: string;
+}

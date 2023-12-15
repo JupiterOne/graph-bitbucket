@@ -35,6 +35,25 @@ export const BITBUCKET_PROJECT_ENTITY_CLASS = 'Project';
 export const BITBUCKET_PROJECT_REPO_RELATIONSHIP_TYPE =
   'bitbucket_project_has_repo';
 
+export const BITBUCKET_PERMISSION_ENTITY_TYPE = 'bitbucket_permission';
+export const BITBUCKET_PERMISSION_ENTITY_CLASS = 'AccessPolicy';
+export const BITBUCKET_PERMISSION_REPO_RELATIONSHIP_TYPE =
+  'bitbucket_repo_allows_permission';
+export const BITBUCKET_PERMISSION_USER_RELATIONSHIP_TYPE =
+  'bitbucket_user_has_permission';
+export const BITBUCKET_PERMISSION_GROUP_RELATIONSHIP_TYPE =
+  'bitbucket_group_has_permission';
+
+export const BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE =
+  'bitbucket_branch_restriction';
+export const BITBUCKET_BRANCH_RESTRICTION_ENTITY_CLASS = 'AccessPolicy';
+export const BITBUCKET_BRANCH_RESTRICTION_REPO_RELATIONSHIP_TYPE =
+  'bitbucket_repo_has_branch_restriction';
+export const BITBUCKET_BRANCH_RESTRICTION_USER_RELATIONSHIP_TYPE =
+  'bitbucket_branch_restriction_allows_user';
+export const BITBUCKET_BRANCH_RESTRICTION_GROUP_RELATIONSHIP_TYPE =
+  'bitbucket_branch_restriction_allows_group';
+
 export const BITBUCKET_PR_ENTITY_TYPE = 'bitbucket_pullrequest';
 export const BITBUCKET_PR_ENTITY_PRIMARY_CLASS = 'PR';
 export const BITBUCKET_PR_ENTITY_CLASSES = [
