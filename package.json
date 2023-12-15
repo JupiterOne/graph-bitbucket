@@ -39,6 +39,7 @@
     "postversion": "cp package.json ./dist/package.json"
   },
   "dependencies": {
+    "@types/node": "^20.10.4",
     "lodash.groupby": "^4.6.0",
     "node-fetch": "^2.6.1",
     "url-join": "^4.0.1",
