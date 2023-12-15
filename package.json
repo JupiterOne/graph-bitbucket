@@ -51,6 +51,7 @@
     "@jupiterone/integration-sdk-core": "^11.4.0",
     "@jupiterone/integration-sdk-dev-tools": "^11.4.0",
     "@jupiterone/integration-sdk-testing": "^11.4.0",
+    "@types/node-fetch": "^2.6.9",
     "auto": "^10.38.5"
   },
   "auto": {
