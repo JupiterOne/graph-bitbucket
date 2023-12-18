@@ -38,9 +38,10 @@ export async function fetchGroups(
     context,
   );
 
-  const userByIdMap = await jobState.getData<IdEntityMap<BitbucketUserEntity>>(
-    DATA_USER_BY_ID_MAP,
-  );
+  const userByIdMap =
+    await jobState.getData<IdEntityMap<BitbucketUserEntity>>(
+      DATA_USER_BY_ID_MAP,
+    );
 
   if (!userByIdMap) {
     throw new IntegrationError({

@@ -17,7 +17,7 @@ export const integrationConfig: IntegrationConfig = {
   //workspace in the config is an array, but the .env var can't be
   workspace: process.env.WORKSPACE
     ? process.env.WORKSPACE.split(',')
-    : ['test-workspace-j1-integration'],
+    : ['ExampleJ1Workspace'],
   ingestPullRequests: process.env.INGEST_PULL_REQUESTS !== 'false',
   enrichedPrs: process.env.ENRICHED_PRS === 'true' || false,
 };

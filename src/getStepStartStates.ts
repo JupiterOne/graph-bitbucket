@@ -22,6 +22,8 @@ export default async function getStepStartStates(
     ['fetch-groups']: { disabled: false },
     ['fetch-projects']: { disabled: false },
     ['fetch-repos']: { disabled: false },
+    ['fetch-repo-permissions']: { disabled: false },
+    ['fetch-repo-branch-restrictions']: { disabled: false },
     ['fetch-prs']: { disabled: !config.ingestPullRequests },
   };
 }

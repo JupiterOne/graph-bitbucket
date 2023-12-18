@@ -53,3 +53,27 @@ test('fetch-repos', async () => {
   const stepResult = await executeStepWithDependencies(stepConfig);
   expect(stepResult).toMatchStepMetadata(stepConfig);
 }, 500000);
+
+test('fetch-repo-permissions', async () => {
+  recording = setupBitbucketRecording({
+    directory: __dirname,
+    name: 'fetch-repo-permissions', //redaction of headers is in setupBitbucketRecording
+  });
+
+  const stepConfig = buildStepTestConfigForStep('fetch-repo-permissions');
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);
+
+test('fetch-repo-branch-restrictions', async () => {
+  recording = setupBitbucketRecording({
+    directory: __dirname,
+    name: 'fetch-repo-branch-restrictions', //redaction of headers is in setupBitbucketRecording
+  });
+
+  const stepConfig = buildStepTestConfigForStep(
+    'fetch-repo-branch-restrictions',
+  );
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+}, 500000);

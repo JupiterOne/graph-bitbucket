@@ -1,12 +1,17 @@
 import {
   createIntegrationEntity,
+  Entity,
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
 
 import {
+  BITBUCKET_BRANCH_RESTRICTION_ENTITY_CLASS,
+  BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
   BITBUCKET_GROUP_ENTITY_CLASS,
   BITBUCKET_GROUP_ENTITY_TYPE,
   BITBUCKET_GROUP_USER_RELATIONSHIP_TYPE,
+  BITBUCKET_PERMISSION_ENTITY_CLASS,
+  BITBUCKET_PERMISSION_ENTITY_TYPE,
   BITBUCKET_PR_ENTITY_CLASSES,
   BITBUCKET_PR_ENTITY_TYPE,
   BITBUCKET_PROJECT_ENTITY_CLASS,
@@ -29,6 +34,7 @@ import {
   BITBUCKET_WORKSPACE_USER_RELATIONSHIP_TYPE,
 } from '../constants';
 import {
+  BitbucketBranchRestriction,
   BitbucketCommit,
   BitbucketGroup,
   BitbucketGroupEntity,
@@ -98,6 +104,9 @@ export function createUserEntity(user: BitbucketUser): BitbucketUserEntity {
   }) as BitbucketUserEntity;
 }
 
+export function createGroupKey(slug: string) {
+  return `bitbucket-group:${slug}`;
+}
 export function createGroupEntity(group: BitbucketGroup): BitbucketGroupEntity {
   const { members, ...source } = group; // remove members for raw data
 
@@ -107,7 +116,7 @@ export function createGroupEntity(group: BitbucketGroup): BitbucketGroupEntity {
       assign: {
         _type: BITBUCKET_GROUP_ENTITY_TYPE,
         _class: BITBUCKET_GROUP_ENTITY_CLASS,
-        _key: `bitbucket-group:${group.slug}`, //there is no uuid in API v.1.0 objects
+        _key: createGroupKey(group.slug), //there is no uuid in API v.1.0 objects
         displayName: group.name,
         name: group.name,
         permission: group.permission,
@@ -252,6 +261,53 @@ export function createPrEntity({
       : [],
   };
   return prEntity;
+}
+
+export function createPermissionEntity(
+  workspace: string,
+  repouuid: string,
+  permission: any,
+): Entity {
+  const key = permission.user
+    ? permission.user.uuid
+    : createGroupKey(permission.group.slug);
+  return createIntegrationEntity({
+    entityData: {
+      source: permission,
+      assign: {
+        _type: BITBUCKET_PERMISSION_ENTITY_TYPE,
+        _class: BITBUCKET_PERMISSION_ENTITY_CLASS,
+        _key: `${key}:${permission.permission}:${repouuid}`,
+        name: permission.type,
+        ownerId: workspace,
+        principalKey: key,
+        permission: permission.permission,
+      },
+    },
+  });
+}
+
+export function createBranchRestriction(
+  workspace: string,
+  repouuid: string,
+  branchRestriction: BitbucketBranchRestriction,
+): Entity {
+  return createIntegrationEntity({
+    entityData: {
+      source: branchRestriction,
+      assign: {
+        _type: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
+        _class: BITBUCKET_BRANCH_RESTRICTION_ENTITY_CLASS,
+        _key: `${repouuid}:${branchRestriction.id.toString()}`,
+        name: branchRestriction.kind,
+        id: branchRestriction.id.toString(),
+        pattern: branchRestriction.pattern,
+        ownerId: workspace,
+        type: branchRestriction.type,
+        matchKind: branchRestriction.branch_match_kind,
+      },
+    },
+  });
 }
 
 export function createWorkspaceHasUserRelationship(

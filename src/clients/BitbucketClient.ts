@@ -19,6 +19,9 @@ import {
   BitbucketGroup,
   BitbucketWorkspace,
   BitbucketWorkspaceMembership,
+  BitbucketGroupPermission,
+  BitbucketUserPermission,
+  BitbucketBranchRestriction,
 } from '../types';
 
 const BASE_API_URL = 'https://bitbucket.org/api/2.0/';
@@ -60,6 +63,9 @@ interface BitbucketAPICalls {
   project: number;
   workspaces: number;
   workspace: number;
+  repositoryGroupPermissions: number;
+  repositoryUserPermissions: number;
+  repositoryBranchRestrictions: number;
 }
 
 function base64(str: string) {
@@ -90,6 +96,9 @@ export default class BitbucketClient {
       project: 0,
       workspaces: 0,
       workspace: 0,
+      repositoryGroupPermissions: 0,
+      repositoryUserPermissions: 0,
+      repositoryBranchRestrictions: 0,
     };
   }
 
@@ -358,9 +367,8 @@ export default class BitbucketClient {
   }
 
   async getAllWorkspaces(): Promise<BitbucketWorkspace[]> {
-    const { results, calls } = await this.collectAllPages<BitbucketWorkspace>(
-      `workspaces`,
-    );
+    const { results, calls } =
+      await this.collectAllPages<BitbucketWorkspace>(`workspaces`);
     this.calls.workspaces += calls;
     return results;
   }
@@ -378,6 +386,42 @@ export default class BitbucketClient {
       `repositories/${workspace}`,
     );
     this.calls.repositories += calls;
+    return results;
+  }
+
+  async getAllReposGroupPermissions(
+    workspace: string,
+    repo: string,
+  ): Promise<BitbucketGroupPermission[]> {
+    const { results, calls } =
+      await this.collectAllPages<BitbucketGroupPermission>(
+        `repositories/${workspace}/${repo}/permissions-config/groups`,
+      );
+    this.calls.repositoryGroupPermissions += calls;
+    return results;
+  }
+
+  async getAllReposUserPermissions(
+    workspace: string,
+    repo: string,
+  ): Promise<BitbucketUserPermission[]> {
+    const { results, calls } =
+      await this.collectAllPages<BitbucketUserPermission>(
+        `repositories/${workspace}/${repo}/permissions-config/users`,
+      );
+    this.calls.repositoryUserPermissions += calls;
+    return results;
+  }
+
+  async getAllRepoBranchRestrictions(
+    workspace: string,
+    repo: string,
+  ): Promise<any[]> {
+    const { results, calls } =
+      await this.collectAllPages<BitbucketBranchRestriction>(
+        `repositories/${workspace}/${repo}/branch-restrictions`,
+      );
+    this.calls.repositoryBranchRestrictions += calls;
     return results;
   }
 
@@ -455,9 +499,10 @@ export default class BitbucketClient {
   }
 
   async getAllWorkspaceMembers(workspace: string): Promise<BitbucketUser[]> {
-    const { results, calls } = await this.collectAllPages<
-      BitbucketWorkspaceMembership
-    >(`workspaces/${workspace}/members`);
+    const { results, calls } =
+      await this.collectAllPages<BitbucketWorkspaceMembership>(
+        `workspaces/${workspace}/members`,
+      );
     this.calls.workspaceMembers += calls;
     return results.map((member) => member.user);
   }

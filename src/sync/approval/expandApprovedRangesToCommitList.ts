@@ -38,9 +38,10 @@ function removeSelfApprovedCommits(commitsWithApprovals: CommitWithApproval[]) {
       continue;
     }
 
-    const approversWithoutAuthor = commitWithApproval.approval.approverUUIDs.filter(
-      (approver) => approver !== commitAuthorUUID,
-    );
+    const approversWithoutAuthor =
+      commitWithApproval.approval.approverUUIDs.filter(
+        (approver) => approver !== commitAuthorUUID,
+      );
 
     if (approversWithoutAuthor.length > 0) {
       colleagueApprovedCommits.push(commitWithApproval.commit);

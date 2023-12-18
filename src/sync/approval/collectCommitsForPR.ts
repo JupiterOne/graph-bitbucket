@@ -34,10 +34,8 @@ export default async function collectCommitsForPR(
     pr,
     updates,
   );
-  const {
-    commits: approvedCommits,
-    approvedCommitsRemoved,
-  } = await expandApprovedRangesToCommitList(logger, commitsCache, approvals);
+  const { commits: approvedCommits, approvedCommitsRemoved } =
+    await expandApprovedRangesToCommitList(logger, commitsCache, approvals);
 
   return commitsCache.commits.reduce(
     (commitsForPR: PRApprovalData, commit) => {

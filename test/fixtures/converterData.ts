@@ -2,12 +2,11 @@ import { parseTimePropertyValue } from '@jupiterone/integration-sdk-core';
 import { v4 as uuid } from 'uuid';
 import { BitbucketPR, BitbucketWorkspace } from '../../src/types';
 
-export const workspaceApiResponse = ({
+export const workspaceApiResponse = {
   uuid: '{816bc128-0132-4b85-a3d0-78900493a1f0}',
   links: {
     owners: {
-      href:
-        'https://bitbucket.org/!api/2.0/workspaces/lifeomic/members?q=permission%3D%22owner%22',
+      href: 'https://bitbucket.org/!api/2.0/workspaces/lifeomic/members?q=permission%3D%22owner%22',
     },
     self: { href: 'https://bitbucket.org/!api/2.0/workspaces/lifeomic' },
     repositories: {
@@ -30,7 +29,7 @@ export const workspaceApiResponse = ({
   slug: 'lifeomic',
   is_private: true,
   name: 'LifeOmic',
-} as unknown) as BitbucketWorkspace;
+} as unknown as BitbucketWorkspace;
 
 export const expectedWorkspaceEntity = {
   _type: 'bitbucket_workspace',
@@ -83,16 +82,13 @@ export const repoApiResponse = {
   name: 'wiki',
   links: {
     watchers: {
-      href:
-        'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/watchers',
+      href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/watchers',
     },
     branches: {
-      href:
-        'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/refs/branches',
+      href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/refs/branches',
     },
     tags: {
-      href:
-        'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/refs/tags',
+      href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/refs/tags',
     },
     commits: {
       href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/commits',
@@ -126,12 +122,10 @@ export const repoApiResponse = {
       href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/forks',
     },
     downloads: {
-      href:
-        'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/downloads',
+      href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/downloads',
     },
     pullrequests: {
-      href:
-        'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/pullrequests',
+      href: 'https://bitbucket.org/!api/2.0/repositories/lifeomic/wiki/pullrequests',
     },
   },
   fork_policy: 'no_public_forks',
@@ -148,8 +142,7 @@ export const repoApiResponse = {
         href: 'https://bitbucket.org/account/user/lifeomic/projects/INFRA',
       },
       avatar: {
-        href:
-          'https://bitbucket.org/account/user/lifeomic/projects/INFRA/avatar/32',
+        href: 'https://bitbucket.org/account/user/lifeomic/projects/INFRA/avatar/32',
       },
     },
     name: 'infra',
@@ -242,49 +235,39 @@ export function expectedProjectEntity(workspace: string) {
   };
 }
 
-export const prApiResponse = ({
+export const prApiResponse = {
   description:
     'This is an automated pull request created by `@lifeomic/deploy-tools`.',
   links: {
     decline: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/decline',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/decline',
     },
     commits: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/commits',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/commits',
     },
     self: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149',
     },
     comments: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/comments',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/comments',
     },
     merge: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/merge',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/merge',
     },
     html: {
-      href:
-        'https://bitbucket.org/lifeomic/jupiter-web-policies/pull-requests/149',
+      href: 'https://bitbucket.org/lifeomic/jupiter-web-policies/pull-requests/149',
     },
     activity: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/activity',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/activity',
     },
     diff: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/diff',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/diff',
     },
     approve: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/approve',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/approve',
     },
     statuses: {
-      href:
-        'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/statuses',
+      href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/pullrequests/149/statuses',
     },
   },
   title:
@@ -298,27 +281,23 @@ export const prApiResponse = ({
       type: 'commit',
       links: {
         self: {
-          href:
-            'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/commit/621458778a28',
+          href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/commit/621458778a28',
         },
         html: {
-          href:
-            'https://bitbucket.org/lifeomic/jupiter-web-policies/commits/621458778a28',
+          href: 'https://bitbucket.org/lifeomic/jupiter-web-policies/commits/621458778a28',
         },
       },
     },
     repository: {
       links: {
         self: {
-          href:
-            'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies',
+          href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies',
         },
         html: {
           href: 'https://bitbucket.org/lifeomic/jupiter-web-policies',
         },
         avatar: {
-          href:
-            'https://bytebucket.org/ravatar/%7B32186636-9145-4322-b92e-bf6c6e91b9a5%7D?ts=js',
+          href: 'https://bytebucket.org/ravatar/%7B32186636-9145-4322-b92e-bf6c6e91b9a5%7D?ts=js',
         },
       },
       type: 'repository',
@@ -332,11 +311,9 @@ export const prApiResponse = ({
   },
   created_on: '2019-01-09T22:29:52.288542+00:00',
   summary: {
-    raw:
-      'This is an automated pull request created by `@lifeomic/deploy-tools`.',
+    raw: 'This is an automated pull request created by `@lifeomic/deploy-tools`.',
     markup: 'markdown',
-    html:
-      '<p>This is an automated pull request created by <code>@lifeomic/deploy-tools</code>.</p>',
+    html: '<p>This is an automated pull request created by <code>@lifeomic/deploy-tools</code>.</p>',
     type: 'rendered',
   },
   source: {
@@ -345,27 +322,23 @@ export const prApiResponse = ({
       type: 'commit',
       links: {
         self: {
-          href:
-            'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/commit/b4503f8ddbfa',
+          href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies/commit/b4503f8ddbfa',
         },
         html: {
-          href:
-            'https://bitbucket.org/lifeomic/jupiter-web-policies/commits/b4503f8ddbfa',
+          href: 'https://bitbucket.org/lifeomic/jupiter-web-policies/commits/b4503f8ddbfa',
         },
       },
     },
     repository: {
       links: {
         self: {
-          href:
-            'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies',
+          href: 'https://api.bitbucket.org/2.0/repositories/lifeomic/jupiter-web-policies',
         },
         html: {
           href: 'https://bitbucket.org/lifeomic/jupiter-web-policies',
         },
         avatar: {
-          href:
-            'https://bytebucket.org/ravatar/%7B32186636-9145-4322-b92e-bf6c6e91b9a5%7D?ts=js',
+          href: 'https://bytebucket.org/ravatar/%7B32186636-9145-4322-b92e-bf6c6e91b9a5%7D?ts=js',
         },
       },
       type: 'repository',
@@ -406,16 +379,13 @@ export const prApiResponse = ({
       uuid: '{14d17a6c-f0fd-4d1d-a8d2-b143354a2995}',
       links: {
         self: {
-          href:
-            'https://bitbucket.org/!api/2.0/users/%7B14d17a6c-f0fd-4d1d-a8d2-b143354a2995%7D',
+          href: 'https://bitbucket.org/!api/2.0/users/%7B14d17a6c-f0fd-4d1d-a8d2-b143354a2995%7D',
         },
         html: {
-          href:
-            'https://bitbucket.org/%7B14d17a6c-f0fd-4d1d-a8d2-b143354a2995%7D/',
+          href: 'https://bitbucket.org/%7B14d17a6c-f0fd-4d1d-a8d2-b143354a2995%7D/',
         },
         avatar: {
-          href:
-            'https://avatar-cdn.atlassian.com/557058%3Ac1f2ea6e-5675-456e-a9ec-b37a43aaeeb5?by=id&sg=A1jiSpTkEY7VLWT8DPOqUDSY1ac%3D&d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEZ-6.png',
+          href: 'https://avatar-cdn.atlassian.com/557058%3Ac1f2ea6e-5675-456e-a9ec-b37a43aaeeb5?by=id&sg=A1jiSpTkEY7VLWT8DPOqUDSY1ac%3D&d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEZ-6.png',
         },
       },
       nickname: 'Erkang Zheng',
@@ -428,16 +398,13 @@ export const prApiResponse = ({
       uuid: '{11fcd85a-7350-4c81-8ad9-9a413a83600c}',
       links: {
         self: {
-          href:
-            'https://bitbucket.org/!api/2.0/users/%7B11fcd85a-7350-4c81-8ad9-9a413a83600c%7D',
+          href: 'https://bitbucket.org/!api/2.0/users/%7B11fcd85a-7350-4c81-8ad9-9a413a83600c%7D',
         },
         html: {
-          href:
-            'https://bitbucket.org/%7B11fcd85a-7350-4c81-8ad9-9a413a83600c%7D/',
+          href: 'https://bitbucket.org/%7B11fcd85a-7350-4c81-8ad9-9a413a83600c%7D/',
         },
         avatar: {
-          href:
-            'https://avatar-cdn.atlassian.com/5b3277b663379b3ac420d8a7?by=id&sg=sz6c6fs7E7ATSHnBf1U1I4vcIEA%3D&d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FAW-4.svg',
+          href: 'https://avatar-cdn.atlassian.com/5b3277b663379b3ac420d8a7?by=id&sg=sz6c6fs7E7ATSHnBf1U1I4vcIEA%3D&d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FAW-4.svg',
         },
       },
       nickname: 'Adam Williams',
@@ -447,7 +414,7 @@ export const prApiResponse = ({
   ],
   merge_commit: null,
   closed_by: null,
-} as unknown) as BitbucketPR;
+} as unknown as BitbucketPR;
 
 export const asdf123Commit: any = {
   hash: 'asdf123',
@@ -492,8 +459,7 @@ export const expectedPullRequestEntity = {
   _type: 'bitbucket_pullrequest',
   _class: ['Review', 'PR'],
   _key: 'lifeomic/jupiter-web-policies/pull-requests/149',
-  name:
-    '🚀 Deploy Tools invites you to upgrade @lifeomic/jupiter-web-toolkit@^5.35.2',
+  name: '🚀 Deploy Tools invites you to upgrade @lifeomic/jupiter-web-toolkit@^5.35.2',
   displayName: `jupiter-web-policies/149`,
   id: prApiResponse.id,
   accountId: 'le_account',

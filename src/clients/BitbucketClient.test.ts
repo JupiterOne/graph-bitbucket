@@ -44,8 +44,7 @@ describe('getWorkspace', () => {
       is_private: true,
       links: {
         avatar: {
-          href:
-            'https://bitbucket.org/workspaces/jupiterone/avatar/?ts=1596575986',
+          href: 'https://bitbucket.org/workspaces/jupiterone/avatar/?ts=1596575986',
         },
         html: {
           href: 'https://bitbucket.org/jupiterone/',
@@ -54,8 +53,7 @@ describe('getWorkspace', () => {
           href: 'https://bitbucket.org/!api/2.0/workspaces/jupiterone/members',
         },
         owners: {
-          href:
-            'https://bitbucket.org/!api/2.0/workspaces/jupiterone/members?q=permission%3D%22owner%22',
+          href: 'https://bitbucket.org/!api/2.0/workspaces/jupiterone/members?q=permission%3D%22owner%22',
         },
         projects: {
           href: 'https://bitbucket.org/!api/2.0/workspaces/jupiterone/projects',
