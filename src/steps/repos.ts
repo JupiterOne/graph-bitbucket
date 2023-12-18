@@ -5,6 +5,7 @@ import {
   RelationshipClass,
   IntegrationMissingKeyError,
   createDirectRelationship,
+  IntegrationWarnEventName,
 } from '@jupiterone/integration-sdk-core';
 
 import { createAPIClient } from '../client';
@@ -102,75 +103,92 @@ export async function fetchRepoPermissions(
     sanitizeConfig(context.instance.config),
     context,
   );
-  await jobState.iterateEntities(
-    {
-      _type: BITBUCKET_REPO_ENTITY_TYPE,
-    },
-    async (repoEntity) => {
-      const repoKey = repoEntity._key;
-      const workspaceUuid = (repoEntity as any).ownerId;
-      await apiClient.iterateRepoGroupPermissions(
-        workspaceUuid,
-        repoKey,
-        async (permission) => {
-          const permEntity = createPermissionEntity(
-            workspaceUuid,
-            repoKey,
-            permission,
-          );
-          await jobState.addEntity(permEntity);
-          await jobState.addRelationship(
-            createDirectRelationship({
-              _class: RelationshipClass.ALLOWS,
-              fromKey: repoKey,
-              fromType: BITBUCKET_REPO_ENTITY_TYPE,
-              toKey: permEntity._key,
-              toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
-            }),
-          );
-          await jobState.addRelationship(
-            createDirectRelationship({
-              _class: RelationshipClass.HAS,
-              fromKey: (permEntity as any).principalKey,
-              fromType: BITBUCKET_GROUP_ENTITY_TYPE,
-              toKey: permEntity._key,
-              toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
-            }),
-          );
-        },
-      );
-      await apiClient.iterateRepoUserPermissions(
-        (repoEntity as any).ownerId,
-        repoEntity._key,
-        async (permission) => {
-          const permEntity = createPermissionEntity(
-            workspaceUuid,
-            repoKey,
-            permission,
-          );
-          await jobState.addEntity(permEntity);
-          await jobState.addRelationship(
-            createDirectRelationship({
-              _class: RelationshipClass.ALLOWS,
-              fromKey: repoKey,
-              fromType: BITBUCKET_REPO_ENTITY_TYPE,
-              toKey: permEntity._key,
-              toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
-            }),
-          );
-          await jobState.addRelationship(
-            createDirectRelationship({
-              _class: RelationshipClass.HAS,
-              fromKey: (permEntity as any).principalKey,
-              fromType: BITBUCKET_USER_ENTITY_TYPE,
-              toKey: permEntity._key,
-              toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
-            }),
-          );
-        },
-      );
-    },
-  );
+  try {
+    await jobState.iterateEntities(
+      {
+        _type: BITBUCKET_REPO_ENTITY_TYPE,
+      },
+      async (repoEntity) => {
+        const repoKey = repoEntity._key;
+        const workspaceUuid = (repoEntity as any).ownerId;
+        await apiClient.iterateRepoGroupPermissions(
+          workspaceUuid,
+          repoKey,
+          async (permission) => {
+            const permEntity = createPermissionEntity(
+              workspaceUuid,
+              repoKey,
+              permission,
+            );
+            await jobState.addEntity(permEntity);
+            await jobState.addRelationship(
+              createDirectRelationship({
+                _class: RelationshipClass.ALLOWS,
+                fromKey: repoKey,
+                fromType: BITBUCKET_REPO_ENTITY_TYPE,
+                toKey: permEntity._key,
+                toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
+              }),
+            );
+            await jobState.addRelationship(
+              createDirectRelationship({
+                _class: RelationshipClass.HAS,
+                fromKey: (permEntity as any).principalKey,
+                fromType: BITBUCKET_GROUP_ENTITY_TYPE,
+                toKey: permEntity._key,
+                toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
+              }),
+            );
+          },
+        );
+        await apiClient.iterateRepoUserPermissions(
+          (repoEntity as any).ownerId,
+          repoEntity._key,
+          async (permission) => {
+            const permEntity = createPermissionEntity(
+              workspaceUuid,
+              repoKey,
+              permission,
+            );
+            await jobState.addEntity(permEntity);
+            await jobState.addRelationship(
+              createDirectRelationship({
+                _class: RelationshipClass.ALLOWS,
+                fromKey: repoKey,
+                fromType: BITBUCKET_REPO_ENTITY_TYPE,
+                toKey: permEntity._key,
+                toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
+              }),
+            );
+            await jobState.addRelationship(
+              createDirectRelationship({
+                _class: RelationshipClass.HAS,
+                fromKey: (permEntity as any).principalKey,
+                fromType: BITBUCKET_USER_ENTITY_TYPE,
+                toKey: permEntity._key,
+                toType: BITBUCKET_PERMISSION_ENTITY_TYPE,
+              }),
+            );
+          },
+        );
+      },
+    );
+  } catch (error) {
+    try {
+      if (JSON.parse(error.code).status == 403) {
+        context.logger.publishWarnEvent({
+          name: IntegrationWarnEventName.MissingPermission,
+          description:
+            'Found a missing permission. Please add Repositories Admin permission to the Oauth consumer.',
+        });
+      } else {
+        throw error;
+      }
+    } catch (secondError) {
+      // This is added in case the json.parse fails. We should rethrow the original issue.
+      throw error;
+    }
+  }
 }
 
 export async function fetchRepoBranchRestrictions(
@@ -181,58 +199,75 @@ export async function fetchRepoBranchRestrictions(
     sanitizeConfig(context.instance.config),
     context,
   );
-  await jobState.iterateEntities(
-    {
-      _type: BITBUCKET_REPO_ENTITY_TYPE,
-    },
-    async (repoEntity) => {
-      const repoKey = repoEntity._key;
-      const workspaceUuid = (repoEntity as any).ownerId;
-      await apiClient.iterateRepoBranchRestrictions(
-        workspaceUuid,
-        repoKey,
-        async (branchRestriction) => {
-          const branchRestrictionEntity = createBranchRestriction(
-            workspaceUuid,
-            repoKey,
-            branchRestriction,
-          );
-          await jobState.addEntity(branchRestrictionEntity);
-          await jobState.addRelationship(
-            createDirectRelationship({
-              _class: RelationshipClass.HAS,
-              fromKey: repoKey,
-              fromType: BITBUCKET_REPO_ENTITY_TYPE,
-              toKey: branchRestrictionEntity._key,
-              toType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
-            }),
-          );
-          for (const user of branchRestriction.users) {
+  try {
+    await jobState.iterateEntities(
+      {
+        _type: BITBUCKET_REPO_ENTITY_TYPE,
+      },
+      async (repoEntity) => {
+        const repoKey = repoEntity._key;
+        const workspaceUuid = (repoEntity as any).ownerId;
+        await apiClient.iterateRepoBranchRestrictions(
+          workspaceUuid,
+          repoKey,
+          async (branchRestriction) => {
+            const branchRestrictionEntity = createBranchRestriction(
+              workspaceUuid,
+              repoKey,
+              branchRestriction,
+            );
+            await jobState.addEntity(branchRestrictionEntity);
             await jobState.addRelationship(
               createDirectRelationship({
-                _class: RelationshipClass.ALLOWS,
-                fromKey: branchRestrictionEntity._key,
-                fromType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
-                toKey: user.uuid,
-                toType: BITBUCKET_USER_ENTITY_TYPE,
+                _class: RelationshipClass.HAS,
+                fromKey: repoKey,
+                fromType: BITBUCKET_REPO_ENTITY_TYPE,
+                toKey: branchRestrictionEntity._key,
+                toType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
               }),
             );
-          }
-          for (const group of branchRestriction.groups) {
-            await jobState.addRelationship(
-              createDirectRelationship({
-                _class: RelationshipClass.ALLOWS,
-                fromKey: branchRestrictionEntity._key,
-                fromType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
-                toKey: createGroupKey(group.slug),
-                toType: BITBUCKET_GROUP_ENTITY_TYPE,
-              }),
-            );
-          }
-        },
-      );
-    },
-  );
+            for (const user of branchRestriction.users) {
+              await jobState.addRelationship(
+                createDirectRelationship({
+                  _class: RelationshipClass.ALLOWS,
+                  fromKey: branchRestrictionEntity._key,
+                  fromType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
+                  toKey: user.uuid,
+                  toType: BITBUCKET_USER_ENTITY_TYPE,
+                }),
+              );
+            }
+            for (const group of branchRestriction.groups) {
+              await jobState.addRelationship(
+                createDirectRelationship({
+                  _class: RelationshipClass.ALLOWS,
+                  fromKey: branchRestrictionEntity._key,
+                  fromType: BITBUCKET_BRANCH_RESTRICTION_ENTITY_TYPE,
+                  toKey: createGroupKey(group.slug),
+                  toType: BITBUCKET_GROUP_ENTITY_TYPE,
+                }),
+              );
+            }
+          },
+        );
+      },
+    );
+  } catch (error) {
+    try {
+      if (JSON.parse(error.code).status == 403) {
+        context.logger.publishWarnEvent({
+          name: IntegrationWarnEventName.MissingPermission,
+          description:
+            'Found a missing permission. Please add Repositories Admin permission to the Oauth consumer.',
+        });
+      } else {
+        throw error;
+      }
+    } catch (secondError) {
+      // This is added in case the json.parse fails. We should rethrow the original issue.
+      throw error;
+    }
+  }
 }
 
 export const repoSteps: IntegrationStep<IntegrationConfig>[] = [
