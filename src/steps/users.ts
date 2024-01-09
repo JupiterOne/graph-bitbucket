@@ -13,6 +13,7 @@ import {
   BITBUCKET_WORKSPACE_USER_RELATIONSHIP_TYPE,
   DATA_USER_BY_ID_MAP,
   DATA_USER_ID_ARRAY,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 import {
   createUserEntity,
@@ -98,5 +99,6 @@ export const userSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-workspaces'],
     executionHandler: fetchUsers,
+    ingestionSourceId: INGESTION_SOURCE_IDS.USERS,
   },
 ];

@@ -29,6 +29,7 @@ import {
   BITBUCKET_USER_REVIEWED_PR_RELATIONSHIP_TYPE,
   DATA_USER_BY_ID_MAP,
   DATA_USER_ID_ARRAY,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 import {
   IdEntityMap,
@@ -192,5 +193,6 @@ export const prSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-repos', 'fetch-users'],
     executionHandler: fetchPRs,
+    ingestionSourceId: INGESTION_SOURCE_IDS.PULL_REQUESTS,
   },
 ];

@@ -37,6 +37,7 @@ import {
   BITBUCKET_BRANCH_RESTRICTION_GROUP_RELATIONSHIP_TYPE,
   BITBUCKET_BRANCH_RESTRICTION_USER_RELATIONSHIP_TYPE,
   BITBUCKET_BRANCH_RESTRICTION_REPO_RELATIONSHIP_TYPE,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 import {
   BitbucketWorkspaceEntity,
@@ -297,6 +298,7 @@ export const repoSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-projects'],
     executionHandler: fetchRepos,
+    ingestionSourceId: INGESTION_SOURCE_IDS.REPOS,
   },
   {
     id: 'fetch-repo-permissions',
@@ -330,6 +332,7 @@ export const repoSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-repos', 'fetch-users', 'fetch-groups'],
     executionHandler: fetchRepoPermissions,
+    ingestionSourceId: INGESTION_SOURCE_IDS.REPOS,
   },
   {
     id: 'fetch-repo-branch-restrictions',
@@ -363,5 +366,6 @@ export const repoSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-repos', 'fetch-users', 'fetch-groups'],
     executionHandler: fetchRepoBranchRestrictions,
+    ingestionSourceId: INGESTION_SOURCE_IDS.REPOS,
   },
 ];

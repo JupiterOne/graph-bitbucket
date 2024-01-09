@@ -16,6 +16,7 @@ import {
   BITBUCKET_PROJECT_ENTITY_TYPE,
   BITBUCKET_PROJECT_ENTITY_CLASS,
   BITBUCKET_WORKSPACE_PROJECT_RELATIONSHIP_TYPE,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 import { BitbucketWorkspaceEntity, BitbucketProjectEntity } from '../types';
 
@@ -77,5 +78,6 @@ export const projectSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-workspaces'],
     executionHandler: fetchProjects,
+    ingestionSourceId: INGESTION_SOURCE_IDS.PROJECTS,
   },
 ];

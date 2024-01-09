@@ -3,8 +3,10 @@ import {
   IntegrationInstanceConfigFieldMap,
   IntegrationInstanceConfig,
   IntegrationValidationError,
+  IntegrationIngestionConfigFieldMap,
 } from '@jupiterone/integration-sdk-core';
 import { createAPIClient } from './client';
+import { INGESTION_SOURCE_IDS } from './constants';
 
 /**
  * A type describing the configuration fields required to execute the
@@ -130,3 +132,38 @@ export function sanitizeConfig(config) {
   }
   return config;
 }
+
+export const ingestionConfig: IntegrationIngestionConfigFieldMap = {
+  [INGESTION_SOURCE_IDS.GROUPS]: {
+    title: 'Bitbucket groups',
+    description:
+      'Get information related to groups of users and their relationships.',
+    defaultsToDisabled: false,
+    cannotBeDisabled: false,
+  },
+  [INGESTION_SOURCE_IDS.PROJECTS]: {
+    title: 'Bitbucket Projects',
+    description: 'Gather information about all projects in the workspace.',
+    defaultsToDisabled: false,
+    cannotBeDisabled: false,
+  },
+  [INGESTION_SOURCE_IDS.REPOS]: {
+    title: 'Bitbucket Repositories',
+    description:
+      'Ingest repositories, permissions and branch restrictions for all repositories in all projects.',
+    defaultsToDisabled: false,
+    cannotBeDisabled: false,
+  },
+  [INGESTION_SOURCE_IDS.USERS]: {
+    title: 'Bitbucket Users',
+    description: 'Gather information about users of the workspace.',
+    defaultsToDisabled: false,
+    cannotBeDisabled: false,
+  },
+  [INGESTION_SOURCE_IDS.WORKSPACES]: {
+    title: 'Bitbucket Workspaces',
+    description: 'Gather information related to the configured workspace',
+    defaultsToDisabled: false,
+    cannotBeDisabled: true,
+  },
+};

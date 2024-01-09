@@ -10,6 +10,7 @@ import { createWorkspaceEntity } from '../sync/converters';
 import {
   BITBUCKET_WORKSPACE_ENTITY_TYPE,
   BITBUCKET_WORKSPACE_ENTITY_CLASS,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 
 export async function fetchWorkspaces(
@@ -47,5 +48,6 @@ export const workspaceSteps: IntegrationStep<IntegrationConfig>[] = [
     relationships: [],
     dependsOn: [],
     executionHandler: fetchWorkspaces,
+    ingestionSourceId: INGESTION_SOURCE_IDS.WORKSPACES,
   },
 ];
