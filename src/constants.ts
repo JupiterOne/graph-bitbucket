@@ -63,3 +63,12 @@ export const BITBUCKET_PR_ENTITY_CLASSES = [
 
 export const DATA_USER_BY_ID_MAP = 'USER_BY_ID_MAP';
 export const DATA_USER_ID_ARRAY = 'USER_ID_ARRAY';
+
+export const INGESTION_SOURCE_IDS = {
+  USERS: 'bitbucket_users',
+  GROUPS: 'bitbucket_groups',
+  PROJECTS: 'bitbucket_projects',
+  PULL_REQUESTS: 'bitbucket_pr',
+  REPOS: 'bitbucket_repos',
+  WORKSPACES: 'bitbucket_workspaces',
+};

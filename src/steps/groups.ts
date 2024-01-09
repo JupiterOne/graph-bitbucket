@@ -16,6 +16,7 @@ import {
   BITBUCKET_WORKSPACE_ENTITY_TYPE,
   BITBUCKET_WORKSPACE_GROUP_RELATIONSHIP_TYPE,
   DATA_USER_BY_ID_MAP,
+  INGESTION_SOURCE_IDS,
 } from '../constants';
 import {
   createGroupEntity,
@@ -131,5 +132,6 @@ export const groupSteps: IntegrationStep<IntegrationConfig>[] = [
     ],
     dependsOn: ['fetch-users', 'fetch-workspaces'],
     executionHandler: fetchGroups,
+    ingestionSourceId: INGESTION_SOURCE_IDS.GROUPS,
   },
 ];
