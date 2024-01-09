@@ -151,7 +151,7 @@ export const ingestionConfig: IntegrationIngestionConfigFieldMap = {
     title: 'Bitbucket Repositories',
     description:
       'Ingest repositories, permissions and branch restrictions for all repositories in all projects.',
-    defaultsToDisabled: false,
+    defaultsToDisabled: true,
     cannotBeDisabled: false,
   },
   [INGESTION_SOURCE_IDS.USERS]: {
