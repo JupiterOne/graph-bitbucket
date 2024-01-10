@@ -4,6 +4,7 @@ import {
   IntegrationConfig,
   ingestionConfig,
   instanceConfigFields,
+  validateInvocation,
 } from './config';
 import getStepStartStates from './getStepStartStates';
 
@@ -13,4 +14,5 @@ export const invocationConfig: IntegrationInvocationConfig<IntegrationConfig> =
     getStepStartStates,
     integrationSteps,
     ingestionConfig,
+    validateInvocation,
   };
