@@ -5,7 +5,6 @@ import {
   IntegrationValidationError,
   IntegrationProviderRetriesExceededError,
   IntegrationProviderAPIError,
-  IntegrationWarnEventName,
 } from '@jupiterone/integration-sdk-core';
 import fetch from 'node-fetch';
 import querystring from 'querystring';
@@ -269,10 +268,7 @@ export default class BitbucketClient {
       if (err instanceof IntegrationProviderAPIError) {
         throw err;
       }
-      this.logger.publishWarnEvent({
-        name: IntegrationWarnEventName.IncompleteData,
-        description: JSON.stringify(err),
-      });
+      this.logger.error({ error: err }, `Failure requesting '${url}'`);
       throw new IntegrationProviderAPIError({
         endpoint: url,
         status: err.response?.statusCode || err.statusCode || err.status,
