@@ -1,9 +1,10 @@
 import {
-  IntegrationError,
   IntegrationProviderAuthenticationError,
   IntegrationConfigLoadError,
   IntegrationLogger,
   IntegrationValidationError,
+  IntegrationProviderRetriesExceededError,
+  IntegrationProviderAPIError,
 } from '@jupiterone/integration-sdk-core';
 import fetch from 'node-fetch';
 import querystring from 'querystring';
@@ -242,8 +243,7 @@ export default class BitbucketClient {
           this.currentAccessToken++;
           await this.makeGetRequest<T>(url, options);
         } else {
-          throw new IntegrationProviderAuthenticationError({
-            cause: undefined,
+          throw new IntegrationProviderRetriesExceededError({
             endpoint: url,
             status: response.status,
             statusText: `Failure requesting '${url}' due to rate-limiting. Please add another set of key/secret credentials to this account.`,
@@ -253,8 +253,7 @@ export default class BitbucketClient {
 
       //some error that is not rate-limiting
       if (response.status < 200 || response.status >= 400) {
-        throw new IntegrationProviderAuthenticationError({
-          cause: undefined,
+        throw new IntegrationProviderAPIError({
           endpoint: url,
           status: response.status,
           statusText: `Failure requesting '${url}'. Response status: ${response.status}. See Errors & Validation under https://docs.atlassian.com/bitbucket-server/rest/7.13.0/bitbucket-branch-rest.html`,
@@ -266,9 +265,15 @@ export default class BitbucketClient {
         status: response.status,
       };
     } catch (err) {
-      throw new IntegrationError({
-        message: `Failure requesting '${url}'`,
-        code: JSON.stringify(err),
+      if (err instanceof IntegrationProviderAPIError) {
+        throw err;
+      }
+      this.logger.error({ error: err }, `Failure requesting '${url}'`);
+      throw new IntegrationProviderAPIError({
+        endpoint: url,
+        status: err.response?.statusCode || err.statusCode || err.status,
+        statusText:
+          err.response?.statusMessage || err.statusText || err.message,
       });
     }
   }
